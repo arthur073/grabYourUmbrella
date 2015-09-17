@@ -69,12 +69,12 @@ module.exports.metadata =
 // TOP OF METADATA
 {
     "com.ionic.keyboard": "1.0.4",
+    "cordova-plugin-android-support-v4": "21.0.1",
     "cordova-plugin-console": "1.0.1",
     "cordova-plugin-device": "1.0.1",
     "cordova-plugin-splashscreen": "2.1.0",
     "cordova-plugin-whitelist": "1.0.0",
-    "de.appplant.cordova.plugin.local-notification": "0.8.2-dev",
-    "cordova-plugin-android-support-v4": "21.0.1"
+    "de.appplant.cordova.plugin.local-notification": "0.8.2-dev"
 }
 // BOTTOM OF METADATA
 });

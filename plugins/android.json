@@ -81,6 +81,9 @@
         "com.ionic.keyboard": {
             "PACKAGE_NAME": "com.ionicframework.umbrella396901"
         },
+        "cordova-plugin-android-support-v4": {
+            "PACKAGE_NAME": "com.ionicframework.umbrella396901"
+        },
         "cordova-plugin-console": {
             "PACKAGE_NAME": "com.ionicframework.umbrella396901"
         },
@@ -97,9 +100,5 @@
             "PACKAGE_NAME": "com.ionicframework.umbrella396901"
         }
     },
-    "dependent_plugins": {
-        "cordova-plugin-android-support-v4": {
-            "PACKAGE_NAME": "com.ionicframework.umbrella396901"
-        }
-    }
+    "dependent_plugins": {}
 }
