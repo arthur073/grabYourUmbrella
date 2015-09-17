@@ -1,0 +1,90 @@
+<ion-view view-title="Intro" hide-nav-bar="true" cache-view="false">
+
+    <ion-slide-box on-slide-changed="slideChanged(index)">
+        <ion-slide>
+            <div class="box top-padded">
+                <div class="logo-intro">
+                    <img src="../img/logo-white.png" class="logo-intro-img" />
+                </div>
+                <h1>Hi there,</h1>
+                <p>
+                    Welcome to the Umbrella reminder app.
+                    <br/> Let's go through a few settings so you can configure your new app.
+                </p>
+                <br/>
+                <button class="button button-assertive button-fab button-fab-right" ng-click="next()"><i class="icon ion-android-arrow-forward"></i></button>
+            </div>
+        </ion-slide>
+
+
+
+        <ion-slide>
+            <div class="box top-padded">
+                <div class="logo-intro">
+                    <img src="../img/intro-city.png" class="logo-intro-img" />
+                </div>
+                <h1>Where exactly do you live?</h1>
+                <p>
+                    We need to get your current location to check the sky above your head.
+                    <br/> Please click the button below:
+                </p>
+                <br/>
+                <button id="retrieveCities_button" class="button button-assertive button-fab button-fab-right" ng-click="retrieveCities()"><i class="icon ion-android-navigate"></i></button>
+                <ion-spinner id="retrieveCities_spinner" class="spinner-stable" style="display:none"></ion-spinner>
+            </div>
+        </ion-slide>
+        <ion-slide>
+            <div class="box top-padded">
+
+                <div class="logo-intro">
+                    <img src="../img/intro-thumbs-up.png" class="logo-intro-img" />
+                </div>
+                <h1>Excellent, 
+                <br/> you live in {{ city }}.</h1>
+                <p>
+                    We based ourselves on the GPS of your phone, however you might not be at home.
+                    <br/> Do you really live in {{ city }} ?
+                </p>
+                <br/>
+                <button class="button button-stable button-fab ink-dark" ng-click="previous()"><i class="icon ion-android-close"></i></button>
+                &nbsp;&nbsp;
+                <button class="button button-assertive button-fab" ng-click="next()"><i class="icon ion-android-done"></i></button>
+            </div>
+        </ion-slide>
+        <ion-slide>
+            <div class="box top-padded">
+
+                <div class="logo-intro">
+                    <img src="../img/intro-time.png" class="logo-intro-img" />
+                </div>
+                <h1>Next, let's set your notification time.</h1>
+                <p>
+                    You'll be reminded each day at the same time.
+                    <br/> At what time do you leave your home for work?
+                </p>
+                <br/>
+                <ionic-timepicker input-obj="timePickerObject">
+                    <button class="button button-assertive button-fab">
+                        <i class="icon ion-android-time"></i>
+                        <standard-time-meridian etime='timePickerObject.inputEpochTime'></standard-time-meridian>
+                    </button>
+                </ionic-timepicker>
+            </div>
+        </ion-slide>
+        <ion-slide>
+            <div class="box top-padded">
+                <div class="logo-intro">
+                    <img src="../img/intro-sync.png" class="logo-intro-img" />
+                </div>
+                <h1>Almost done!</h1>
+                <p>
+                    So, you're saying you live in <strong>{{ city }}</strong> and you want to be reminded at <strong>{{ time }}</strong>. 
+                    <br/><br/> Let's sync this data with our servers so you can receive your notifications right on time!
+                </p>
+                <br/>
+                <button id="syncdata_button" class="button button-assertive button-fab" ng-click="syncData()"><i class="icon ion-android-upload"></i></button>
+                <ion-spinner id="syncdata_spinner" class="spinner-stable" style="display:none"></ion-spinner>
+            </div>
+        </ion-slide>
+    </ion-slide-box>
+</ion-view>

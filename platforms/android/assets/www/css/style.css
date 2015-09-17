@@ -1,0 +1,88 @@
+/* Intro pages */
+
+.slider {
+  height: 100%;
+}
+.slider-slide {
+  color: white;
+  background-color: #303F9F;
+  text-align: center;
+  font-weight: 300;
+  font-size:140%;
+  padding:20px;
+  padding-top: 100px;
+}
+
+.top-padded
+{
+    padding-top: 10%;
+}
+
+.top-padded-a-lot
+{
+    padding-top: 20%;
+}
+
+
+.slider-pager-page 
+{
+    color: #eee !important;
+}
+
+.slider-pager-page.active
+{
+    color: #E3F2FD !important;
+}
+
+.h1 
+{
+    color: white !important;
+}
+
+.logo-intro-img
+{
+   max-height: 100px;
+}
+
+/* Main page style */
+
+#MainPage 
+{
+    background-color: #342a2a;
+    color:#ffffff;
+    opacity:87%;
+    width:100%;
+    display:block;
+    text-align:center;
+    font-size:140%;
+    padding:20px;
+}
+
+#MainPage h1 
+{
+    padding-top:10%;
+}
+
+.scroll-refresher .ionic-refresher-content
+{
+    color:#FFFFFF;
+    opacity:100%;
+}
+
+#bar 
+{
+    padding-top:10%;
+    max-height:150%;
+}
+
+.larger {
+    font-size: 200%;
+}
+
+.large {
+    font-size: 110%;
+}
+
+.smaller {
+    font-size: 80%;
+}

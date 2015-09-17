@@ -1,0 +1,42 @@
+<ion-view hide-nav-bar="true" view-title="Main" id="MainPage">
+    <ion-content>
+        <ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()">
+        </ion-refresher>
+
+
+        <div class="content">
+            <div class="hero has-mask " style="background-image: url('../img/main-flat-background.png');">
+                <div class="content">
+                    <h3><a class="light">{{ city }}</a></h3>
+                    <h4>{{ country }}</h4>
+                </div>
+            </div>
+            <button class="button button-fab button-fab-top-right button-assertive icon ion-android-settings waves-effect waves-button waves-light" ng-click="settings()"></button>
+
+            <div class="content padding double-padding-x">
+                <div id="no_connection" style="display:none">
+                    <p>
+                        <i class="icon ion-android-warning larger"></i>
+                    </p>
+                    <p>
+                        Unable to retrieve weather conditions. Please check your network connection.
+                    </p>
+                </div>
+                <ion-spinner id="retrieveWeather_spinner" class="spinner-stable" style="display:inline"></ion-spinner>
+                
+                <div id="weather_forecast" style="display:none">
+                    <span class="smaller">
+                        Current weather conditions:
+                    </span>
+                    <span>
+                        <br/><br/>
+                        <i class="icon ion-thermometer"></i> {{ temperature }}°C &ndash; {{ conditions }} &ndash; 
+                        <i class="icon ion-waterdrop"></i> {{ humidity }}%
+                    </span>
+                    <canvas id="bar" class="chart chart-bar" data="graph.data" labels="graph.labels" series='graph.series' options="graph.options" colours="graph.colours"></canvas>
+                </div>
+            </div>
+
+        </div>
+    </ion-content>
+</ion-view>
