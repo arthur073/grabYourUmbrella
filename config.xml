@@ -19,6 +19,9 @@
   <feature name="StatusBar">
     <param name="ios-package" value="CDVStatusBar" onload="true"/>
   </feature>
+  <feature name="Geolocation">
+    <param name="android-package" value="org.apache.cordova.geolocation.GeoBroker" />
+  </feature>
   <plugin name="Device" value="org.apache.cordova.Device"/>
   <platform name="android">
     <icon src="resources/android/icon/drawable-ldpi-icon.png" density="ldpi"/>
