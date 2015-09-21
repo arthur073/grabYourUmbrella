@@ -199,7 +199,9 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
 
   $scope.doRefresh = function() {
     // Display spinner and hide graph
-    document.querySelector("#retrieveWeather_spinner").style.display = "inline";
+    if (document.querySelector("#retrieveWeather_spinner") != null) {
+      document.querySelector("#retrieveWeather_spinner").style.display = "inline";
+    }
     document.querySelector("#weather_forecast").style.display = "none";
 
     // Do data refresh
