@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic','ionic.service.core','ionic.service.analytics', 'ionic-material', 'ionic-timepicker', 'chart.js'])
+angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analytics', 'ionic-material', 'ionic-timepicker', 'chart.js'])
 
 .run(function($ionicPlatform, $ionicAnalytics) {
   $ionicPlatform.ready(function() {
@@ -15,7 +15,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.analytics
     if (window.StatusBar) {
       StatusBar.styleDefault();
     }
-    
+
     $ionicAnalytics.register();
   });
 })
@@ -40,10 +40,10 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.analytics
 
 
 
-.controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate) {
+.controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $http) {
 
   // Called to navigate to the main app
-  
+
   $scope.next = function() {
     $ionicSlideBoxDelegate.next();
   };
@@ -86,25 +86,20 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.analytics
   }
 
   var onGetCurrentPositionSuccess = function(position) {
-    var geocoder = new google.maps.Geocoder();
     console.log("lat: " + position.coords.latitude);
     console.log("long: " + position.coords.longitude);
     var lat = parseFloat(position.coords.latitude);
     var lng = parseFloat(position.coords.longitude);
-    var latlng = new google.maps.LatLng(lat, lng);
 
     // Persiting lat and long
     window.localStorage.setItem("lat", lat);
     window.localStorage.setItem("lng", lng);
 
-
-    geocoder.geocode({
-      'latLng': latlng
-    }, function(results, status) {
-      if (status == google.maps.GeocoderStatus.OK) {
-        if (results[0]) {
-          var arrAddress = results[0].address_components;
-          // iterate through address_component array
+    // Getting city name and country
+    $http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
+        lat + ',' + lng + '&key=AIzaSyDbPXnZc9TrDTWcjBGuni6HRfHV9JLjPco')
+      .then(function(coord_results) {
+          var arrAddress = coord_results.data.results[0].address_components;
           for (var i = 0; i < arrAddress.length; i++) {
             if (arrAddress[i].types[0] == "locality") {
               console.log(arrAddress[i].long_name); // city
@@ -120,15 +115,10 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.analytics
               $scope.country = window.localStorage.getItem("country");
             }
           }
-        }
-        else {
-          alert("No results found");
-        }
-      }
-      else {
-        alert("Geocoder failed due to: " + status);
-      }
-    });
+        },
+        function error(error) {
+          console.log(error);
+        });
   }
 
 
@@ -249,8 +239,8 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.analytics
           for (var i = 0; i < 6; i++) {
             var label = forecastArray[i].dt_txt.split(" ")[1].slice(0, -3);
             $scope.graph.labels.push(label);
-
-            if (forecastArray[i].rain['3h'] != undefined) {
+            
+            if (forecastArray[i].rain != undefined && forecastArray[i].rain['3h'] != undefined) {
               // Rain :)
               $scope.graph.data[0].push(forecastArray[i].rain['3h']);
             }
