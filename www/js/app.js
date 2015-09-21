@@ -202,7 +202,9 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
     if (document.querySelector("#retrieveWeather_spinner") != null) {
       document.querySelector("#retrieveWeather_spinner").style.display = "inline";
     }
-    document.querySelector("#weather_forecast").style.display = "none";
+    if (document.querySelector("#weather_forecast") != null) {
+      document.querySelector("#weather_forecast").style.display = "none";
+    }
 
     // Do data refresh
     getWeatherForecast();
@@ -253,9 +255,15 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
           }
 
           // Hide spinner and display graph
-          document.querySelector("#retrieveWeather_spinner").style.display = "none";
-          document.querySelector("#no_connection").style.display = "none";
-          document.querySelector("#weather_forecast").style.display = "block";
+          if (document.querySelector("#retrieveWeather_spinner") != null) {
+            document.querySelector("#retrieveWeather_spinner").style.display = "none";
+          }
+          if (document.querySelector("#no_connection") != null) {
+            document.querySelector("#no_connection").style.display = "none";
+          }
+          if (document.querySelector("#weather_forecast") != null) {
+            document.querySelector("#weather_forecast").style.display = "block";
+          }
         }
         else {
           // In case of error
