@@ -16,8 +16,9 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
       StatusBar.styleDefault();
     }
 
-    alert(window.plugins);
-    alert(window.plugin);
+    alert(window.cordova);
+    alert(window.cordova.plugins);
+    alert(window.cordova.plugin);
 
     $ionicAnalytics.register();
 
