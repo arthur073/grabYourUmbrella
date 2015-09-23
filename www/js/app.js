@@ -18,8 +18,8 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
 
     $ionicAnalytics.register();
 
-    if (window.plugin && window.plugin.notification) {
-      window.plugin.notification.local.onTrigger = function(id, state, json) {
+    if (window.plugins && window.plugins.notification) {
+      window.plugins.notification.local.onTrigger = function(id, state, json) {
         var notification = {
           id: id,
           state: state,
@@ -229,6 +229,7 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
 
     console.log($cordovaLocalNotification);
     alert(window.plugin);
+    alert(window.plugins);
 
     // Schedule notification at the right time
     var alarmTime = new Date();
