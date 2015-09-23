@@ -3,9 +3,9 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analytics', 'ionic-material', 'ionic-timepicker', 'chart.js'])
+angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analytics', 'ionic-material', 'ionic-timepicker', 'chart.js', 'ngCordova'])
 
-.run(function($ionicPlatform, $ionicAnalytics) {
+.run(function($ionicPlatform, $rootScope, $ionicAnalytics, $timeout) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -17,15 +17,18 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
     }
 
     $ionicAnalytics.register();
-    
-    
-    // Notification has reached its trigger time
-    window.cordova.plugins.notification.local.on("trigger", function (notification) {
-        if (notification.id != 10)
-            return;
 
-        alert("Notification set!");
-    });
+
+    window.plugin.notification.local.onTrigger = function(id, state, json) {
+      var notification = {
+        id: id,
+        state: state,
+        json: json
+      };
+      $timeout(function() {
+        $rootScope.$broadcast("$cordovaLocalNotification:triggered", notification);
+      });
+    };
   });
 })
 
@@ -37,7 +40,7 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
       templateUrl: 'templates/main.html',
       controller: 'MainCtrl'
     })
-	.state('intro', {
+    .state('intro', {
       url: '/intro',
       templateUrl: 'templates/intro.html',
       controller: 'IntroCtrl'
@@ -49,7 +52,7 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
 
 
 
-.controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $http) {
+.controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $http, $cordovaLocalNotification) {
 
   $scope.next = function() {
     $ionicSlideBoxDelegate.next();
@@ -132,7 +135,7 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
 
   $scope.timePickerObject = {
     inputEpochTime: ((new Date("January 1, 2016 09:00:00")).getHours() * 60 * 60), //Optional
-    step: 15, //Optional
+    step: 5, //Optional
     format: 24, //Optional
     titleLabel: 'Notification time', //Optional
     setLabel: 'Set', //Optional
@@ -165,18 +168,20 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
     document.querySelector("#syncdata_button").style.display = "none";
     document.querySelector("#syncdata_spinner").style.display = "inline";
 
-    console.log(window.cordova);
     // Schedule notification at the right time
-    if (window.cordova && window.cordova.plugins.notification) {
-    
-      window.cordova.plugins.notification.local.schedule({
-        id: 10,
-        title: "Meeting in 15 minutes!",
-        text: "Jour fixe Produktionsbesprechung",
-      });
-      
-      alert("notification scheduled!");
-    }
+    var alarmTime = new Date();
+    alarmTime.setMinutes(alarmTime.getMinutes() + 1);
+    $cordovaLocalNotification.add({
+      id: "1234",
+      date: alarmTime,
+      message: "This is a message",
+      title: "This is a title",
+      autoCancel: true,
+      sound: null
+    }).then(function() {
+      console.log("The notification has been set");
+    });
+
 
     setTimeout(function() {
       // And go to main screen
@@ -194,11 +199,11 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
 
   $scope.city = window.localStorage.getItem("city");
   $scope.country = window.localStorage.getItem("country");
-  
+
   if ($scope.city == null || $scope.country == null) {
-	$state.go('intro');
+    $state.go('intro');
   }
-  
+
   $scope.graph = {}; // Empty graph object to hold the details for this graph
 
   $scope.graph.options = {
@@ -206,11 +211,11 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
     scaleFontColor: "rgba(255,255,255,.5)",
     scaleGridLineColor: "rgba(255,255,255,.1)",
     scaleLineColor: "rgba(255,255,255,.1)",
-	scaleOverride : true,
-    scaleSteps : 10,
-    scaleStepWidth : .1,
-    scaleStartValue : 0,
-	responsive: false
+    scaleOverride: true,
+    scaleSteps: 10,
+    scaleStepWidth: .1,
+    scaleStartValue: 0,
+    responsive: false
   };
   $scope.graph.colours = [{
     fillColor: "#FFF",
@@ -263,14 +268,14 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
           for (var i = 0; i < 6; i++) {
             var label = forecastArray[i].dt_txt.split(" ")[1].slice(0, -3);
             $scope.graph.labels.push(label);
-            
+
             if (forecastArray[i].rain != undefined && forecastArray[i].rain['3h'] != undefined) {
               // Rain :)
-			  var rainQuantity = forecastArray[i].rain['3h'];
-			  
-			  if (rainQuantity > 1) {
-				rainQuantity = 1;
-			  }
+              var rainQuantity = forecastArray[i].rain['3h'];
+
+              if (rainQuantity > 1) {
+                rainQuantity = 1;
+              }
               $scope.graph.data[0].push(rainQuantity);
             }
             else {
@@ -311,11 +316,15 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
       destructiveText: 'Reset settings',
       titleText: 'Settings',
       cancelText: 'Cancel',
-      cancel: function() {
-      },
+      cancel: function() {},
       destructiveButtonClicked: function(index) {
         $state.go('intro');
       }
     });
   };
+  
+  
+  $scope.$on("$cordovaLocalNotification:triggered", function(id, state, json) {
+    alert("Added a notification");
+  });
 });
