@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analytics', 'ionic-material', 'ionic-timepicker', 'chart.js', 'ngCordova'])
+angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analytics', 'ionic-material', 'ionic-timepicker', 'chart.js'])
 
 .run(function($ionicPlatform, $rootScope, $ionicAnalytics, $timeout) {
   $ionicPlatform.ready(function() {
@@ -16,24 +16,7 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
       StatusBar.styleDefault();
     }
 
-    alert(window.cordova);
-    alert(window.cordova.plugins);
-    alert(window.cordova.plugin);
-
     $ionicAnalytics.register();
-
-    if (window.plugins && window.plugins.notification) {
-      window.plugins.notification.local.onTrigger = function(id, state, json) {
-        var notification = {
-          id: id,
-          state: state,
-          json: json
-        };
-        $timeout(function() {
-          $rootScope.$broadcast("$cordovaLocalNotification:triggered", notification);
-        });
-      };
-    }
   });
 })
 
@@ -57,7 +40,7 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
 
 
 
-.controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $http, $cordovaLocalNotification, $ionicPopup) {
+.controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $http, $ionicPopup) {
 
   $scope.next = function() {
     $ionicSlideBoxDelegate.next();
@@ -231,21 +214,17 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
     }
 
 
-    console.log($cordovaLocalNotification);
-    alert(window.plugin);
-    alert(window.plugins);
-
+    
     // Schedule notification at the right time
     var alarmTime = new Date();
     alarmTime.setMinutes(alarmTime.getMinutes() + 1);
-    $cordovaLocalNotification.schedule([{
-      id: 1,
+    
+    window.cordova.plugins.notification.local.schedule({
+      id: 10,
       date: alarmTime,
       title: 'hi there',
       text: 'Multi Message 1 (actually only)'
-    }]);
-
-
+    });
 
     setTimeout(function() {
       // And go to main screen
@@ -386,9 +365,4 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
       }
     });
   };
-
-
-  $scope.$on("$cordovaLocalNotification:triggered", function(id, state, json) {
-    alert("Added a notification");
-  });
 });
