@@ -5,7 +5,7 @@
 
 
         <div class="content">
-            <div class="hero has-mask " style="background-image: url('../main-flat-background.png');">
+            <div class="hero has-mask " style="background-image: url('main-flat-background.png');">
                 <div class="content">
                     <h3><a class="light">{{ city }}</a></h3>
                     <h4>{{ country }}</h4>
@@ -32,6 +32,10 @@
                         <br/><br/>
                         <i class="icon ion-thermometer"></i> {{ temperature }}°C &ndash; {{ conditions }} &ndash; 
                         <i class="icon ion-waterdrop"></i> {{ humidity }}%
+                    </span>
+					<br/><br/><br/>
+					<span class="smaller">
+                        Precipitations forecast (mm):
                     </span>
                     <canvas id="bar" class="chart chart-bar" data="graph.data" labels="graph.labels" series='graph.series' options="graph.options" colours="graph.colours"></canvas>
                 </div>

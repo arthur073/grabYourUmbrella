@@ -23,15 +23,15 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
 .config(function($stateProvider, $urlRouterProvider) {
 
   $stateProvider
-    .state('intro', {
-      url: '/',
-      templateUrl: 'templates/intro.html',
-      controller: 'IntroCtrl'
-    })
     .state('main', {
-      url: '/main',
+      url: '/',
       templateUrl: 'templates/main.html',
       controller: 'MainCtrl'
+    })
+	.state('intro', {
+      url: '/intro',
+      templateUrl: 'templates/intro.html',
+      controller: 'IntroCtrl'
     });
 
   $urlRouterProvider.otherwise("/");
@@ -41,8 +41,6 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
 
 
 .controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $http) {
-
-  // Called to navigate to the main app
 
   $scope.next = function() {
     $ionicSlideBoxDelegate.next();
@@ -184,13 +182,23 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
 
   $scope.city = window.localStorage.getItem("city");
   $scope.country = window.localStorage.getItem("country");
+  
+  if ($scope.city == null || $scope.country == null) {
+	$state.go('intro');
+  }
+  
   $scope.graph = {}; // Empty graph object to hold the details for this graph
 
   $scope.graph.options = {
     showTooltips: false,
     scaleFontColor: "rgba(255,255,255,.5)",
     scaleGridLineColor: "rgba(255,255,255,.1)",
-    scaleLineColor: "rgba(255,255,255,.1)"
+    scaleLineColor: "rgba(255,255,255,.1)",
+	scaleOverride : true,
+    scaleSteps : 10,
+    scaleStepWidth : .1,
+    scaleStartValue : 0,
+	responsive: false
   };
   $scope.graph.colours = [{
     fillColor: "#FFF",
@@ -246,7 +254,12 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
             
             if (forecastArray[i].rain != undefined && forecastArray[i].rain['3h'] != undefined) {
               // Rain :)
-              $scope.graph.data[0].push(forecastArray[i].rain['3h']);
+			  var rainQuantity = forecastArray[i].rain['3h'];
+			  
+			  if (rainQuantity > 1) {
+				rainQuantity = 1;
+			  }
+              $scope.graph.data[0].push(rainQuantity);
             }
             else {
               // No rain
@@ -287,7 +300,6 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
       titleText: 'Settings',
       cancelText: 'Cancel',
       cancel: function() {
-        // add cancel code..
       },
       destructiveButtonClicked: function(index) {
         $state.go('intro');
