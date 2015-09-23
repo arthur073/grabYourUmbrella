@@ -18,17 +18,18 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
 
     $ionicAnalytics.register();
 
-
-    window.plugin.notification.local.onTrigger = function(id, state, json) {
-      var notification = {
-        id: id,
-        state: state,
-        json: json
+    if (window.plugin && window.plugin.notification) {
+      window.plugin.notification.local.onTrigger = function(id, state, json) {
+        var notification = {
+          id: id,
+          state: state,
+          json: json
+        };
+        $timeout(function() {
+          $rootScope.$broadcast("$cordovaLocalNotification:triggered", notification);
+        });
       };
-      $timeout(function() {
-        $rootScope.$broadcast("$cordovaLocalNotification:triggered", notification);
-      });
-    };
+    }
   });
 })
 
@@ -52,7 +53,7 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
 
 
 
-.controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $http, $cordovaLocalNotification) {
+.controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $http, $cordovaLocalNotification, $ionicPopup) {
 
   $scope.next = function() {
     $ionicSlideBoxDelegate.next();
@@ -66,14 +67,6 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
     $scope.slideIndex = index;
   };
 
-  var onSuccess = function(position) {
-    alert("good!");
-  };
-
-  var onError = function(error) {
-    alert("error");
-  };
-
   $scope.retrieveCities = function() {
     // Hide button and show spinner
     document.querySelector("#retrieveCities_button").style.display = "none";
@@ -81,19 +74,35 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
 
 
     // Get GPS position
-    navigator.geolocation.getCurrentPosition(onGetCurrentPositionSuccess, onError);
-
-    setTimeout(function() {
-      // Go to next slide
-      $scope.next();
-
-      // Show button and hide spinner
-      document.querySelector("#retrieveCities_button").style.display = "inline";
-      document.querySelector("#retrieveCities_spinner").style.display = "none";
-    }, 3000);
-
-
+    navigator.geolocation.getCurrentPosition(onGetCurrentPositionSuccess, onGetCurrentPositionError);
   }
+
+
+  var storeCoords = function(coord_results) {
+
+    var arrAddress = coord_results.data.results[0].address_components;
+    for (var i = 0; i < arrAddress.length; i++) {
+      if (arrAddress[i].types[0] == "locality") {
+        console.log(arrAddress[i].long_name); // city
+
+        // Persisting local city name
+        window.localStorage.setItem("city", arrAddress[i].long_name);
+        $scope.city = window.localStorage.getItem("city");
+      }
+      if (arrAddress[i].types[0] == "country") {
+        console.log(arrAddress[i].long_name); // country
+        // Persisting local country name
+        window.localStorage.setItem("country", arrAddress[i].long_name);
+        $scope.country = window.localStorage.getItem("country");
+      }
+    }
+
+  };
+
+  var onGetCurrentPositionError = function(error) {
+    $scope.insertAddressManually("Oops! We can't reach your GPS.", "Please enter your address below.", true);
+  }
+
 
   var onGetCurrentPositionSuccess = function(position) {
     console.log("lat: " + position.coords.latitude);
@@ -109,27 +118,67 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
     $http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
         lat + ',' + lng + '&key=AIzaSyDbPXnZc9TrDTWcjBGuni6HRfHV9JLjPco')
       .then(function(coord_results) {
-          var arrAddress = coord_results.data.results[0].address_components;
-          for (var i = 0; i < arrAddress.length; i++) {
-            if (arrAddress[i].types[0] == "locality") {
-              console.log(arrAddress[i].long_name); // city
-
-              // Persisting local city name
-              window.localStorage.setItem("city", arrAddress[i].long_name);
-              $scope.city = window.localStorage.getItem("city");
-            }
-            if (arrAddress[i].types[0] == "country") {
-              console.log(arrAddress[i].long_name); // country
-              // Persisting local country name
-              window.localStorage.setItem("country", arrAddress[i].long_name);
-              $scope.country = window.localStorage.getItem("country");
-            }
-          }
+          storeCoords(coord_results);
         },
         function error(error) {
-          console.log(error);
+          alert("We are unable to connect to our servers, please check your network connection and try again.")
         });
+
+    // Show button and hide spinner
+    document.querySelector("#retrieveCities_button").style.display = "inline";
+    document.querySelector("#retrieveCities_spinner").style.display = "none";
+
+    // Go to next slide
+    $scope.next();
   }
+
+
+  $scope.insertAddressManually = function(title, message, goToNext) {
+    $scope.data = {};
+
+    // Display a popup to get information about city and state
+    var myPopup = $ionicPopup.show({
+      template: '<input type="text" ng-model="data.address">',
+      title: title,
+      subTitle: message,
+      scope: $scope,
+      buttons: [{
+        text: '<b>Done</b>',
+        type: 'button-assertive',
+        onTap: function(e) {
+          if (!$scope.data.address) {
+            //don't allow the user to close unless he enters wifi password
+            e.preventDefault();
+          }
+          else {
+            // Get geolocalisation coordinates
+            // Getting city name and country
+            $http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' +
+                $scope.data.address + '&key=AIzaSyDbPXnZc9TrDTWcjBGuni6HRfHV9JLjPco')
+              .then(function(coord_results) {
+                  storeCoords(coord_results);
+                },
+                function error(error) {
+                  alert("We are unable to connect to our servers, please check your network connection and try again.")
+                });
+
+
+            if (goToNext) {
+              // Go to next slide
+              $scope.next();
+
+              // Show button and hide spinner
+              document.querySelector("#retrieveCities_button").style.display = "inline";
+              document.querySelector("#retrieveCities_spinner").style.display = "none";
+            }
+
+            return $scope.data.address;
+          }
+        }
+      }]
+    });
+
+  };
 
 
 
@@ -168,19 +217,29 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
     document.querySelector("#syncdata_button").style.display = "none";
     document.querySelector("#syncdata_spinner").style.display = "inline";
 
+
+    function printObject(o) {
+      var out = '';
+      for (var p in o) {
+        out += p + ': ' + o[p] + '\n';
+      }
+      return out;
+    }
+
+
+    console.log($cordovaLocalNotification);
+    alert(window.plugin);
+
     // Schedule notification at the right time
     var alarmTime = new Date();
     alarmTime.setMinutes(alarmTime.getMinutes() + 1);
-    $cordovaLocalNotification.add({
-      id: "1234",
+    $cordovaLocalNotification.schedule([{
+      id: 1,
       date: alarmTime,
-      message: "This is a message",
-      title: "This is a title",
-      autoCancel: true,
-      sound: null
-    }).then(function() {
-      console.log("The notification has been set");
-    });
+      title: 'hi there',
+      text: 'Multi Message 1 (actually only)'
+    }]);
+
 
 
     setTimeout(function() {
@@ -322,8 +381,8 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
       }
     });
   };
-  
-  
+
+
   $scope.$on("$cordovaLocalNotification:triggered", function(id, state, json) {
     alert("Added a notification");
   });

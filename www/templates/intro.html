@@ -42,11 +42,11 @@
                 <h1>Excellent, 
                 <br/> you live in {{ city }}.</h1>
                 <p>
-                    We based ourselves on the GPS of your phone, however you might not be at home.
-                    <br/> Do you really live in {{ city }} ?
+                    We will take this city as your default location.
+                    <br/> Is that correct? 
                 </p>
                 <br/>
-                <button class="button button-stable button-fab ink-dark" ng-click="previous()"><i class="icon ion-android-close"></i></button>
+                <button class="button button-stable button-fab ink-dark" ng-click="insertAddressManually('Our guess is not correct?','Insert your address below',false)"><i class="icon ion-android-close"></i></button>
                 &nbsp;&nbsp;
                 <button class="button button-assertive button-fab" ng-click="next()"><i class="icon ion-android-done"></i></button>
             </div>
