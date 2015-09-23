@@ -7,14 +7,6 @@
         "is_top_level": true,
         "variables": {}
     },
-    "cordova-plugin-console": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-console"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "cordova-plugin-whitelist": {
         "source": {
             "type": "registry",
@@ -39,21 +31,12 @@
         "is_top_level": true,
         "variables": {}
     },
-    "de.appplant.cordova.plugin.local-notification": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/katzer/cordova-plugin-local-notifications",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-android-support-v4": {
+    "cordova-plugin-geolocation": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-android-support-v4"
+            "id": "cordova-plugin-geolocation"
         },
-        "is_top_level": false,
+        "is_top_level": true,
         "variables": {}
     }
 }
