@@ -43,7 +43,7 @@
     <icon src="resources/android/icon/icon.png"/>
     <splash src="resources/android/splash/mdpi/screen.png" density="mdpi"/>
     <splash src="resources/android/splash/hdpi/screen.png" density="hdpi"/>
-    <splash src="resources/android/splash/xhdpi/screen.jpg" density="xhdpi"/>
+    <splash src="resources/android/splash/xhdpi/screen.png" density="xhdpi"/>
     <splash src="resources/android/splash/xxhdpi/screen.png" density="xxhdpi"/>
   </platform>
 </widget>
