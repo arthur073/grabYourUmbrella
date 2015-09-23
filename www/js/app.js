@@ -17,6 +17,15 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
     }
 
     $ionicAnalytics.register();
+    
+    
+    // Notification has reached its trigger time
+    window.cordova.plugins.notification.local.on("trigger", function (notification) {
+        if (notification.id != 10)
+            return;
+
+        alert("Notification set!");
+    });
   });
 })
 
@@ -159,11 +168,14 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
     console.log(window.cordova);
     // Schedule notification at the right time
     if (window.cordova && window.cordova.plugins.notification) {
+    
       window.cordova.plugins.notification.local.schedule({
-        text: "Delayed Notification",
-        every: "day",
+        id: 10,
+        title: "Meeting in 15 minutes!",
+        text: "Jour fixe Produktionsbesprechung",
       });
-      console.log("notification has been set");
+      
+      alert("notification scheduled!");
     }
 
     setTimeout(function() {
