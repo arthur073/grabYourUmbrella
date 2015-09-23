@@ -16,6 +16,9 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
       StatusBar.styleDefault();
     }
 
+    alert(window.plugins);
+    alert(window.plugin);
+
     $ionicAnalytics.register();
 
     if (window.plugins && window.plugins.notification) {
