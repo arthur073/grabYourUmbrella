@@ -39,6 +39,14 @@
         "is_top_level": true,
         "variables": {}
     },
+    "cordova-plugin-android-support-v4": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-android-support-v4"
+        },
+        "is_top_level": false,
+        "variables": {}
+    },
     "de.appplant.cordova.plugin.local-notification": {
         "source": {
             "type": "registry",
@@ -47,10 +55,10 @@
         "is_top_level": true,
         "variables": {}
     },
-    "cordova-plugin-android-support-v4": {
+    "org.apache.cordova.device": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-android-support-v4"
+            "id": "org.apache.cordova.device"
         },
         "is_top_level": false,
         "variables": {}
