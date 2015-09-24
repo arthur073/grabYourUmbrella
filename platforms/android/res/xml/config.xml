@@ -38,4 +38,7 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
+    <feature name="LocalNotification">
+        <param name="android-package" value="de.appplant.cordova.plugin.localnotification.LocalNotification" />
+    </feature>
 </widget>

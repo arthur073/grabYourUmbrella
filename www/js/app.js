@@ -17,6 +17,21 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
     }
 
     $ionicAnalytics.register();
+
+    // Schedule notification at the right time
+    var alarmTime = new Date();
+    alarmTime.setMinutes(alarmTime.getMinutes() + 1);
+
+    alert(window.cordova.plugins);
+    alert(window.cordova.plugins.notification);
+
+    window.cordova.plugins.notification.local.schedule({
+      id: 10,
+      date: alarmTime,
+      title: 'hi there',
+      text: 'Multi Message 1 (actually only)'
+    });
+
   });
 })
 
@@ -168,7 +183,6 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
   };
 
 
-
   $scope.timePickerObject = {
     inputEpochTime: ((new Date("January 1, 2016 09:00:00")).getHours() * 60 * 60), //Optional
     step: 5, //Optional
@@ -204,21 +218,10 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'ionic.service.analyti
     document.querySelector("#syncdata_button").style.display = "none";
     document.querySelector("#syncdata_spinner").style.display = "inline";
 
-
-    function printObject(o) {
-      var out = '';
-      for (var p in o) {
-        out += p + ': ' + o[p] + '\n';
-      }
-      return out;
-    }
-
-
-    
     // Schedule notification at the right time
     var alarmTime = new Date();
     alarmTime.setMinutes(alarmTime.getMinutes() + 1);
-    
+
     window.cordova.plugins.notification.local.schedule({
       id: 10,
       date: alarmTime,
